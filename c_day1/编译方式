@@ -10,17 +10,21 @@
     
     dir 查看当前目录存在的文件
     cls  清屏
+    gcc -v 查看版本号
+    
+    sleep（）延迟多少ms，函数位于 <windows.h>中
+    
     
 3.hello.c----------->hello.exe的编译过程
-   1:  hello.c--> hello.i（预处理  -e）-->hello.s(编译 -s)--hello.o（汇编-c）-->hello.exe（链接 无参数）
+   1 gcc编译四步:  hello.c--> hello.i（预处理  -e）-->hello.s(编译 -s)--hello.o（汇编-c）-->hello.exe（链接 无参数）
         
-        1)gcc -E hello.c -o hello.i
+        1) 预处理：-E  xxx.i 预处理文件    gcc -E hello.c -o hello.i   
         
-        2)gcc -S hello.i -o hello.s
+        2) 编译：  -S  xxx.s 汇编文件      gcc -S hello.i -o hello.s
         
-        3)gcc -C hello.s -o hello.o
+        3)汇 编：  -c  xxx.o 目标文件      gcc -C hello.s -o hello.o
         
-        4)gcc    hello.o -o hello.exe
+        4)连接：   无  xxx.exe  可执行文件           gcc    hello.o -o hello.exe
         
     2: 用 gcc hello.c -o  hello.exe 命令可以一步到位
         
