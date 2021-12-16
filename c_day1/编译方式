@@ -11,3 +11,5 @@
     dir 查看当前目录存在的文件
     cls  清屏
     
+    hello.c----------->hello.exe的编译过程
+        hello.c--> hello.i（预处理）-->hello.s(编译)--hello.o（汇编）-->hello.exe（链接）
