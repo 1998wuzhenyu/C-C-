@@ -1,0 +1,244 @@
+
+for循环：
+		for(表达式1：表达式2：表达式3)
+		{
+			循环体
+		}
+
+		表达式1--》表达式2（判别表达式）--》为真--》进入循环体。--》表达式3
+		--》表达式2（判别表达式）--》为真--《进入循环体--》表达式3....
+
+	循环因子：
+			定义在for之外，for循环结束，也能使用。
+			定义在for之内，for循环结束，不能使用。
+	for的3个表达式均可省略，但  ； 不可以省略。
+
+for中表达式有多个：
+		for（int i=1,a=3;i<10,a<20;i++,a+=5）
+		{
+			printf("i=%d--a=%d",i,a);
+		}
+
+
+猜数字：
+		1.生成一个随机数。
+			1）添加一个随机数种子。srand（time(NULL));
+			2)添加头文件<stdlib.h> <time.h>
+			3)生成随机数 int n=rand()%100;//0---99
+
+		2.循环输入数据猜。
+			int num;
+			while(1)  //死循环
+			{
+				接收用户输入scanf（“%d”，&num）；
+				比较用户输入的数 和 随机生成的数 的大小
+				if（n>num){}
+				else if(n<num){}
+				else
+
+			}
+		3.跳出循环。
+			break。跳出循环
+
+break：
+		1）for，whiel中跳出一级循环。
+		2）switch中是防止穿透。
+
+
+嵌套循环：
+		外层循环执行一次，内层循环执行一周。
+		for（i=0;i<10;i++)
+		{
+			for(j=0;j<10;j++)
+			{
+				for(k=0;k<10;k++)
+				{
+					
+				}
+			}
+		}
+
+练习：模拟显示时钟
+		
+int main()
+{   
+    int i,j,k;
+    int flag=0;
+
+    for(i=0;i<24;i++)//时
+    {
+        for(j=0;j<60;j++)//分
+        {
+            for(k=0;k<60;k++)//秒
+            {
+                printf("%02d:%02d:%02d\n",i,j,k);
+                Sleep(990);   //延时1s
+                //system("'cls");//清屏
+            
+                if(i==0&&j==0&&k==10)
+                {   
+                    flag++;
+                    printf("clu 10s times is %d\n",flag);
+                    i,j,k=0;
+                }
+              
+            }
+        }
+    }
+   
+
+    return 0;
+}
+
+
+练习：打印九九乘法表
+
+	
+				
+				#include<stdio.h>
+				#include<string.h>
+				int main()
+				{   
+					int i,j;
+
+					for(i=1;i<=9;i++)
+					{
+						for(j=1;j<=i;j++)
+						{
+							printf("%dX%d=%d\t",j,i,j*i);  //  \t  制表符
+						}
+						printf("\n");
+					}
+
+					return 0;
+				}
+
+
+cintinue:
+		作用：结束【本次】循环，continue关键字， 之后的循环体在本次执行
+
+goto：
+
+
+
+数组：
+	相同数据类型的有序集合。
+	 数组内各个内存地址连续。
+	 数组名为地址。是数组元素的首地址。 arr=&arr【0】； //%p 求地址
+			
+			        
+    int arr[10]={1,2,3,4,5,6,7,8,67,99};
+    printf("数组大小：%u\n",sizeof(arr));   //40
+    printf("数组元素大小：%u\n",sizeof(arr[0]));//4
+	printf("数组元素个数：%d\n",sizeof(arr)/sizeof(arr[0]));//4
+
+数组初始化：
+		int arr[12]={1,2,3,4,5,6,7,8,9,10,11,12}
+		int arr[12]={1,2,3,4}//剩余未初始化的元素，默认0值。
+		int arr[12]={0}//初始化一个全为0的数组
+		int arr[]={1,2,3,4}//编译器自动求取元素个数
+
+		int arr[10];
+		arr[0]=2;
+		arr[1]=3;
+		取余未赋值的元素未被初始化，默认值随机数
+
+ 练习：素组内元素逆序。
+		#include<stdio.h>
+#include<string.h>
+#include<Windows.h>
+
+
+
+int main()
+{   
+    int arr[]={1,2,3,4,5,6,7,8};
+    int len=sizeof(arr)/sizeof(arr[0]);
+    int i=0;     //在数组中第一个元素下标   前
+    int j=len-1;//在数组最后一个元素的下标   后
+    int temp=0;
+    int n,m;
+/*
+    //打印原始数组
+    for ( n = 0; n < len; n++)
+    {
+      printf("%d",arr[n]);
+    }
+    printf("\n");
+	*/
+
+    //交换 素组元素，做逆序排序
+
+    while(i<j)
+    {
+        temp=arr[i];
+        arr[i]=arr[j];
+        arr[j]=temp;
+
+        i++;
+        j--;
+    }
+
+    //打印交换后的数组
+    for ( m = 0; m < len; m++)
+    {
+      printf("%d",arr[m]);
+    }
+      printf("\n");
+
+    return 0; 
+}
+
+
+冒泡排序：
+		 
+#include<stdio.h>
+#include<string.h>
+#include<Windows.h>
+
+//逆序
+
+int main()
+{   
+    int arr[]={9,8,7,6,5,4};
+    int len=sizeof(arr)/sizeof(arr[0]);
+    int i=0;     //在数组中第一个元素下标   前
+    int j=0;//在数组最后一个元素的下标   后
+    int temp;
+
+
+    //打印原始数组
+    for ( i = 0; i < len; i++)
+    {
+      printf("%d ",arr[i]);
+    }
+    printf("\n");
+
+    //完成冒泡排序
+
+    for(i=0;i<len-1;i++)//外层控制行
+    {
+        for(j=0;j<len-1-i;j++)//内层控制列
+        {
+
+            if(arr[j]>arr[j+1]) //三杯水交换
+            {
+                temp=arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]=temp;
+                 
+            }
+        }
+    }
+
+    //打印排序后数组
+    for ( i = 0; i< len; i++)
+    {
+      printf("%d ",arr[i]);
+    }
+      printf("\n");
+
+    return 0; 
+}
+
+	
