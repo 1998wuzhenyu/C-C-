@@ -1,0 +1,336 @@
+
+//练习：求出5名学生3门功课的总成绩。（一个学生的总成绩，一门功课的总成绩） 
+
+
+//练习：求出5名学生3门功课的总成绩。（一个学生的总成绩，一门功课的总成绩） 
+
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{
+    int arr[5][3];
+    int row=sizeof(arr)/sizeof(arr[0]);
+    int col=sizeof(arr[0])/sizeof(arr[0][0]);
+
+    //get garden
+        for(int i=0;i<row;i++)
+             { 
+                 for(int j=0;j<col;j++)
+                 {
+                       scanf("%d",&arr[i][j]);
+                 }
+             }
+         
+        printf("----------------------\n");
+        //output
+         for(int i=0;i<row;i++)
+             { 
+                 for(int j=0;j<col;j++)
+                 {
+                      printf("%d\t",arr[i][j]);
+                 }
+                 printf("\n");
+           }
+
+        printf("----------------------\n");
+        //get five students garden to sum
+
+        for(int i=0;i<row;i++)
+        {   int sum=0;
+            for(int j=0;j<col;j++)
+            {  
+                sum+=arr[i][j];
+            }
+            printf("the-%d-student sum garden is %d \n",i+1,sum);
+        }
+
+        // get the subject sum garden
+        printf("----------------------\n");
+         for(int i=0;i<col;i++)  // subject
+           {    int sbsum=0;
+         
+                for(int j=0;j<row;j++)
+                {  
+                    sbsum+=arr[j][i];
+                }
+                 printf("the-%d-subject sum garden is %d \n",i+1,sbsum);
+             }
+
+
+
+    return 0;
+
+}
+在VS中遇到问题：
+            禁止显示状态 警告 C6031 返回值被忽略: "scanf".
+
+            解决方法：
+
+            错误提示的原因在与vs中的SDL检查；
+            关闭步骤右键单击工程文件-->属性-->  c/c++  -->所有选项--> SDL检查选项改为 否
+
+
+快速导入代码：
+        VS-》工具-》代码片段管理器-》visual c++
+
+多维数组：
+    三维数组：[层][行][列]
+
+字符数组 和 字符串数组：
+            字符数组：
+                    char str[5]={'h','e','l','l','o'};
+                    char str[6]={'h','e','l','l','o','\0'}; //'\0'是结束符标志，字符里面要手动添加。
+
+                    char str[]="hello" 
+                    printf("%s",str) //使用printf 打印字符串的时候，必须碰到\t结束。
+
+
+    练习：键盘输入字符串，存至str[]中，统计每个字母出现的次数。
+            
+         
+         
+//    练习：键盘输入字符串，存至str[]中，统计每个字母出现的次数
+
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{
+    char str[11]={0};
+    for(int i=0;i<10;i++)
+    {
+        scanf("%c",&str[i]);
+    }
+    int count[26]={0};
+
+    for(int i=0;i<11;i++)
+    {
+        int index=str[i]-'a';
+        count[index]++;
+    }
+    for(int i=0;i<26;i++)
+    {
+        if(count[i]!=0)
+        {
+            printf("%c字符在字符串中出现 %d \n",i+'a',count[i]);
+        }
+    }
+    return 0;
+
+}
+
+
+
+字符串：
+
+    字符串获取 scanf：  【不安全】不知道何时停止和长度，怕溢出。
+        注意： 1. 用于存储字符串的空间必须足够大，防止溢出。 char str【5】
+                2.获取字符串，%s, 遇到空格 和 \n终止。
+        借助“正则表达式” 获取带有空格的字符串  scanf(["%['n\]s"],str);  [\n]  表示除 \n 之外
+        
+字符串操作函数：  【不安全】不知道何时停止和长度，怕溢出。
+        gets:获取一个字符串，返回字符串的首地址，默认可以获取带有空格的字符串。
+            char *gets(char *s);
+                    参数：用于存储字符串的空间。
+                    返回值：返回实际获取的字符串首地址。
+                    
+
+            int main()
+            {
+                    char str[100];
+                    printf("获取字符串：%s\n",gets(str));//gets()
+
+  
+                return 0;
+
+            } 
+
+        fgets:获取一个字符串。   预留\0的存储空间。空间足够 读取 \n， 空间不足舍弃\n   。     
+            char *fget（char *s，int size，FILE *stream）
+                    参数1：用于存储字符串的空间地址。
+                    参数2：描述空间的大小。
+                    参数3：读取字符串的位置。键盘：标准输入：stdin
+                    返回值：返回值获取到字符串的首地址。
+
+                 char str[100];
+                 printf("获取字符串：%s\n",fgets(str，sizeof(str),stdin);//gets()
+
+        puts:`将一个字符串写道屏幕，print（"%s","hello")/ printf("hello"\n);/puts("hello");
+                输出字符串后会自动添加 \n  换行符。
+
+                int puts(const char *s);
+                参数1：待写出到屏幕的字符串。
+                返回值：成功：非负数  。   失败：-1 .
+
+                  char str1[]="hello world";      puts(str1); 
+                  int ret=puts（str）； pintf("ret=%d",str);
+
+
+        fputs: 输出一个字符串。     输出字符串后会不会自动添加 \n  换行符。 
+          int fputs（const char *str，FILE *stream）
+                    参数1：待写出到屏幕的字符串。 屏幕--》标准输出：stdout
+                    参数2：写出位置 stdout。
+                    返回值：成功 0；  失败：-1  。 
+
+                    
+                    char str2[]="hello";
+                    int ret=fputs(str2,stdout);
+                    printf("ret=%d\n",ret);
+
+        strlen: 获取字符串的 有效长度：不包含  \0  。  碰到\0结束。   
+                strlen(const char *s);
+                参数：代求长度的字符串。
+                返回值：返回一个有效的字符个数。
+
+                         char str3[]="hello";
+                         printf("sizeof(str3)%u\n",sizeof(str3));
+                         printf("strlen(str3)%u",strlen(str3));
+
+练习：字符串追加： 
+
+
+            
+//    练习：字符拼接
+
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{   
+    char str[100];
+    char str1[]="hello";
+    char str2[]="world";
+
+    int i=0;  //循环str1
+    while(str1[i]!='\0')
+    { 
+        str[i]=str1[i];   //把对应str1位置的 字符 赋予 str3
+        i++;
+    }
+
+    printf("%d\n",i);
+
+    int j=0;                //循环str2
+    while (str2[j]!='\0')
+    {
+       str[i+j]=str2[j];
+       j++;
+    }
+
+    printf("j=%d\n",j);
+
+    //手动添加 str上的 结束标志  \o
+
+    str[i+j]='\0';
+
+    printf("str=%s\n",str);
+    
+
+
+    return 0;
+
+}   
+
+
+
+
+函数分类：
+        系统函数：标准C库。libc
+                1.引入头文件---声明函数
+                2.根据函数原型调用。
+
+        用户自定义：
+                出来需要提高函数原型之外，还需要提供函数实现过程。
+
+随机数：
+        1.播种随机数种子：srand(time(NULL));
+        2.引入头文件  #include<stdlib.h>  ;#include<time.h>
+        3.生成随机数： rand（）%100；
+
+
+函数定义：
+        包含  函数原型（返回值类型、函数名、形参列表） 和 函数体（大括号一对、具体代码实现）
+
+           void add(){}  //void表示 空   ，无返回
+
+
+        int add(int a,int b,intc)
+        {
+            return a+b+c;   //返回的是一个 int类型的数值
+        }
+        
+
+
+函数调用： 
+            int ret=add(10,3,9);  //提高定义一个 int类型的名为ret变量去接收 add（）的返回值。  
+            参数（实际参数）：在调用时，传参必须严格按照形参填充。（参数个数，类型，顺序）。（没有类型描述符）
+            形参列表： 形式参数列表。一定包含形参类别 和 变量名。
+          
+            int test(char ch,short b,int arr[],int m)
+            调用tset（）：
+
+                int arr[]={1,2,6};  //要先定义数组的元素
+                test('a',23,arr,5)  ；
+
+函数声明：
+        
+        包含 函数原型（返回值类型、函数名、形参列表）+“；”
+        要求 在函数调用之前，编译必须见过函数定义。否则，需要函数声明 。
+        如果自定义的函数防止 int main（）后，则需要在 int main（）前进行声明。
+        隐式声明：【不要依赖】
+        #include<xxx.h>-->包含函数声明
+                
+
+exit函数:  在include<stdlib.h>
+        return：
+            返回当前函数调用，将返回值返回给调用者。
+        exit（）函数：
+            退出当前程序。
+
+
+多文件编程：  在VS中设置多个项目：右键点击生成解决方案--》添加-》新建项目。 可以在文件名中右键选择 设为启动项目 ，即可对当前文件进行编译。
+            
+            将多个含有不同函数功能.c文件模块，编译到一起，生成一个.exe文件。
+           
+           <>  包裹的头文件为系统库 头文件
+            “”包裹的头文件为用户自定义  头文件 
+
+             
+            防止头文件重复包含；
+                1）#pragma once   ----windows系统中
+                2）#ifndef _HEAD_H_         <-----head.h
+                   #define _HEAD_H
+                         ... 头文件内容  //函数声明 ；类型定义；宏定义；include 头文件
+                   #endif
+
+            例：在head.h中
+                        #ifndef _HEAD_H_
+                        #define _HEAD_H_
+
+                        //头文件
+                        #include<stdio.h>
+                        #include<math.h>
+                        #include<time.h>
+                        #include<string.h>
+                        #include<stdlib.h>
+
+                        //函数声明
+
+                        int add(int a, int b);
+                        int mul(int a, int b);
+                        int sub(int a, int b);
+
+                        //类型定义
+                        //宏定义
+
+                        #define PI 3.24
+                        #define N 10
+
+                        #endif // !_HEAD_H_
+
+
+                在main中调用 include"head.h"即可
+
+
+                  
