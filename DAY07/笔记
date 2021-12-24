@@ -1,0 +1,409 @@
+指针和函数：
+
+		栈帧：
+			当函数调用时，系统会在stack空间上申请一块内存区域，用来	供函数调用，主要存放 形参和局部  变量（定义在函数内部）。
+			当函数调用结束，这块内存区域自动被释放（消失）。
+
+
+		传值和传址：
+				传值：函数调用期间，实参将自己的值，拷贝一份给形参。
+				传址：函数调用期间，实参将地址值，拷贝一份给形参。
+
+						（地址值--》在swap函数栈帧内部，修改了main函数栈帧内部的局部变量 ）
+
+
+						#include<stdio.h>
+ 
+                        int swap1(int a,int b)//m 和n 是形参
+                        {
+                            int temp=0;
+                            temp=a;
+                            a=b;
+                            b=temp;
+                            return 0;
+                        }
+
+                        int swap2(int *a,int *b)//是在地址的基础上进行内容交换 
+                        {
+                            int temp=0;
+                            temp=*a;
+                            *a=*b;
+                            *b=temp;
+                            return 0;
+                        }
+
+                        int main()
+                        {   int u=5;
+                            int o=7;
+                            int n=20;
+                            int m=30;
+    
+                            swap1(u,o);//由于 函数运行在stack开辟空间，然后 被立即释放，相当于 交换后的值被释放了。
+                                        //所以输出还是n=20，m=30；
+                            printf("u=%d---o=%d\n",u,o);  
+
+                            swap2(&n,&m); //n和m是实参  
+                            printf("n=%d---m=%d\n",n,m);  
+                            return 0;
+                        }
+
+
+	指针做函数参数：
+			int swap（int *a，int*b）
+			调用时，传有效地址值进入。
+
+
+
+	数组做函数参数：
+            void BubbleSort(int arr[10]，int n)==void BubbleSort(int arr[],int n)==void BubbleSort(int *arr,int n)
+
+            传递不再是整个数组，而是数组的首地址（一个指针）。
+            所以，当整型数组做函数参数时，我们通常在函数定义中，封装2个型式参数。一个数组首地址，一个表示元素个数。
+            例：冒泡排序
+             #include<stdio.h>
+                void bubbleSort();
+                 int main(void)
+                 {      
+                     int arr[]={2,5,3,7,67,35,75,86,56,55,45};
+                     int n=sizeof(arr)/sizeof(arr[0]);
+
+                     bubbleSort(arr,n);
+
+                     for (size_t i = 0; i < n; i++)
+                     {
+                        printf("%d ",arr[i]);
+                     }
+                     printf("\n");
+
+                     return 0;
+                 }
+
+                void bubbleSort(int *arr,int n)
+                {
+                    for(int i=0;i<n-1;i++)
+                    {
+                        for(int j=0;j<n-1;j++)
+                        {
+                            if(arr[j]>arr[j+1])
+                            {
+                                int temp =arr[j];
+                                arr[j]=arr[j+1];
+                                arr[j+1]=temp;
+                            }
+                        }
+                    }
+                }
+
+
+
+
+    指针做函数返回值：
+            int *test_func(int a,int b);
+            指针做函数返回值，不能返回【局部变量的地址值】。
+
+            //指针函数
+
+            #include<stdio.h>
+            int m=10;       //全局变量 对应空间小数==》程序结束
+            int *func(int a,int b) //指针函数
+             {
+              return &m;
+             }
+            int main()
+            {   
+                int *ret=NULL;//空指针
+                ret=func(2,4);
+                printf("ret=%d\n",*ret);
+                return 0;
+            }  
+             
+ 
+ 
+数组做函数返回值：
+                C语言，不允许！！！！只能写出指针形式。      
+                
+指针和字符串： 
+            1）   
+                char str1[]={'h','i','\0'}; 变量，可读可写
+                char str2[]="hi";           变量，可读可写
+
+                char *str3="hi";            变量，只读
+                     str3变量中，存储的是字符串 常量“hi”中首个字符‘h’的地址值。
+                      
+                     str3[1]='H'  //错误！！ 
+                    
+
+                char *str4={'h','i','\0'};  错误！！！
+
+
+            例子：
+
+            #include<stdio.h>
+
+            int main()
+            {   
+                char str1[]="hello";      //{'h','e','l','l','o,}
+                char m[]="hello";
+
+                char *str2="hello";         //在  *str2中   "hello"是一个字符串常量，不能修改。
+                char *n="hello";
+    
+                printf("str1=%p\n",str1);
+                printf("m   =%p\n",m);
+
+                printf("str2=%p\n",str2);
+                printf("n   =%p\n",n);
+
+                return 0;
+            }
+
+            2）
+                当字符串（字符数组），做函数参数时，不需要提供两个参数。因为每个字符串都有  ’\0’
+
+
+练习：
+        1.字符串比较：
+            #include<stdio.h>
+
+            #include<string.h>
+
+            int mycomparestring(char *str1,char *str2)
+            {   //str1==str2:0;str1>str2: 1;str1<str2: -1 
+
+                int i=0;
+                while(str1[i]==str2[i])  //*(str1+i)==*(str2+i)
+                {
+                    if(str1[i]=='\0')
+                    {
+                        return 0;
+                    }
+                    i++;
+                }
+                   return (str1[i]>str2[i])?1:-1;
+  
+            }
+
+            int mycomparestring2(char *str1,char *str2)
+            {   //str1==str2:0;str1>str2: 1;str1<str2: -1 
+
+                while(*str1==*str2)
+                {
+                    if(*str1==*str2)
+                    {
+                        return 0;
+                    }
+                    str1++;
+                    str2++;
+                }
+                   return (*str1>*str2)?1:-1;
+  
+            }
+
+            int main ()
+            {   
+                char *str1="hello";
+                char *str2="llo";
+
+                //int ret=mycomparestring(str1,str2);
+                int ret=mycomparestring2(str1,str2);
+
+                if(ret==0)
+                {
+                    printf("\n  str1==str2\n");
+                }
+                 else   if(ret==1)
+                {
+                    printf("\n  str1>str2\n");
+                }
+                else if (ret==-1)
+                {
+                    printf("\n  str1<str2\n");
+                }     
+                else
+                    printf("\n  输入有误\n");
+                return 0;
+
+            }		
+
+
+字符串复制：
+
+        #include<stdio.h>
+
+            void mystrcopy1(char *src,char *dst)
+            {
+                int i=0;
+                while (src[i]!=0)//src[i]=*(src+i)
+                {
+                    dst[i]=src[i];
+                    i++;
+
+                }
+                dst[i]='\0';
+    
+            }
+            //指针版
+            void mystrcopy2(char *src,char *dst)
+            {
+
+                while (*src)
+                {
+                    *dst=*src;//src[i]=*(src+i)
+                    src++;
+                    dst++;
+
+                }
+                *dst='\0';
+    
+            }
+
+            int main()
+            {   
+
+                char *src="hello";
+                char dst[100]={0};
+                mystrcopy1(src,dst);
+                printf("\ns----dst=%s\n",dst);
+                return 0;
+            }
+
+
+
+
+字符串区空格：
+
+
+                    #include<stdio.h>
+                    //no space
+                    void mynospace(char *src,char *dst)
+                    {
+                        int i=0;
+                        int j=0;
+
+                        while (src[i]!=0)
+                        {
+                           if(src[i]!=' ')
+                           {
+                                dst[j]=src[i];
+                                j++;
+                           }
+                           i++;
+                        }
+                        dst[j]="\0";
+                    }
+                    //指针版本
+                    void mynospace1(char *src,char *dst)
+                    {
+  
+                        while (*src!=0)
+                        {
+                           if(*src!=' ')
+                           {
+                                *dst=*src;
+                               dst++;
+                           }
+                          src++;
+                        }
+                        dst="\0";
+                    }
+
+                    int main()
+                    {   
+                        char *src="hello world man";
+                        char dst[100]={0};
+                        mynospace1(src,dst);
+                        printf("\n---%s---\n",dst);
+
+                        return 0;
+                    }
+
+
+带参数的main函数：
+
+            无参 main 函数：int main（void）==int main（）
+            带参数的main函数：int main（int argc, char *argv[]）==int main(int argc ,char **argv) 
+                        参数1：表示给main函数传递的参数的总个数
+                        参数2：是一个数组！数组的每一个元素都是字符串char*    
+
+            测试1：
+                    命令行中的，使用gcc编译生成 可执行文件，如：test.exe
+                    运行：test.exe xx yy rr
+                    生成：
+                        argv[0]=argMain2.exe
+                        argv[1]=xx
+                        argv[2]=yy
+                        argv[3]=rr
+            测试2：
+                    在VS中。项目名称上--》右键--》属性--》调试--》命令行参数--》将test.exe xx yy rr写入
+
+
+str中 substr出现的次数：
+
+        strstr函数：在str中，找substr出现的位置  //include<string.h> 中包含 strstr()
+        char *strstr（char *str,char *sibstr)
+            参数1：原串
+            参数2：子串
+            返回值：子串在原串中的位置。（地址值）；
+            如果没有：NULL 
+
+
+            例：
+            #include<stdio.h>
+        #include<string.h>
+        // strstr函数：在str中，找substr出现的位置
+        int main()
+        {   
+            char *ret=strstr("nihaonihao","hh");
+            printf("ret=%s\n",ret);
+    
+            return 0;
+        }
+
+求非空字符串元素个数：
+
+统计字符串中子串出现的次数：
+                            #include<stdio.h>
+                            #include<string.h>
+                            // 统计字符串中子串出现的次数
+
+                            int str_times(char *str,char *substr)
+                            {
+                                int count=0;
+                                char *p=strstr(str,substr);//hihihihi
+                                while(p!=NULL)
+                                {
+                                    count++;
+                                    p=p+strlen(substr);//p=p+strlen(substr)-->"hihihi"
+                                    p=strstr(p,substr);//返回： "hihi"
+                                }
+                                return count;
+                            }
+
+
+                            int main()
+                            {   
+                                char *str="hihihihihininini";
+                                char substr[]="hi";
+                                int ret=str_times(str,substr);
+                                printf("count:%d",ret);
+                                return 0;
+                            }
+
+
+字符串逆置：
+
+判断字符串是回文：
+
+字符串处理函数：
+
+        字符串拷贝：
+
+        字符串拼接：
+
+        字符串比较：
+
+        字符串格式化输入、输出：
+
+        sprintf（）：
+
+        sscanf（）： 
