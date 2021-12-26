@@ -1,0 +1,422 @@
+
+字符串中非空字符个数:
+
+
+
+                    #include<stdio.h>
+                    //字符串中非空字符个数
+                    int noSpaceString(char *str)
+                    //int noSpaceString(char str[])
+                    {
+                        int count=0;
+                        char *p=str;  //s数组本身就是一个地址，因此 不用 char *p=&str
+                        while(*p)
+                        {
+                            if(*p!=' ')
+                            {
+                                count++;
+                            }
+                            p++;
+                        }
+                        return count;
+                    }
+                    int main()
+                    {   char *str="hello world man  t";
+                        //char str[]="hello world man";
+                        int ret=noSpaceString(str);
+                        printf("\nzifushuliang:%d\n",ret);
+                    }
+
+
+字符串逆置：
+
+                    #include<stdio.h>
+                    #include<string.h>
+                    // 字符串逆序
+                    void strInserve(char *str)
+                    {
+                         char *start=str;           //记录元素首地址
+                         char *end=str+strlen(str)-1;//记录最后一个元素地址
+
+                         while(start<end)           //首元素地址是否<最后一个元素地址
+                         {
+                             char temp=*start;         
+                             *start=*end;       
+                             *end=temp;
+                             start++;//首元素对应指针后移
+                             end--;//尾元素对应指针前移
+                         }
+                    }
+
+                    int main()
+                    {   
+                        char str[]="ni ha oio";
+
+                        strInserve(str);
+
+                        printf(" after--- %s\n",str);
+
+                        return 0;
+                    }
+
+
+
+
+判断字符串是回文：
+
+
+                    #include<stdio.h>
+                    #include<string.h>
+                     //回文字符串  abcddcba
+                    int str_abcba(char *str)
+                    {
+                         char *start=str; //记录元素首地址
+                         char *end=str+strlen(str)-1;//记录最后一个元素地址
+                         while (start<end)  //首元素地址是否<最后一个元素地址
+                         {
+                            if(*start!=*end) //判断字符是否一致
+                            {
+                                return 0 ;//0表示非 回文
+                                start++;//首元素对应指针后移
+                                end--;//尾元素对应指针前移
+                            }
+                            return 1;   //1表示回文
+                         }
+                    }
+
+                    int main()
+                    {   
+                        char str[]="abccba";
+                        int ret=str_abcba(str);
+    
+                        if(ret==0)
+                        {
+                            printf("no\n");
+                        }
+                        else if(ret==1)
+                        {
+                            printf("yes\n");
+                        }
+                        else
+                        {
+                             printf("error\n");
+                        }
+
+                        return 0;
+                    }
+
+字符串处理函数：
+
+        字符串拷贝：
+                strcpy:
+                        将src的内容，拷贝给dst。返回dest。保证dest空间足够大。【不安全】
+                        char *strcpy(char *dest,const *char src)
+                        函数调用结束 返回值和 dest参数结果一致。
+
+                strncpy：
+                        将src内容，拷贝给dest。只拷贝n个字节。通常n与dest对应的空间一致。
+                        默认 不添加‘\0’
+                        char *strncpy(char *dest,const *src,size_t n);
+                        特性：； n>src:只拷贝src的大小    
+                                 n<src：只拷贝n字节大小。不添加‘\0’
+
+        字符串拼接：
+                strcat:
+                        将src的内容，拼接到dest后。返回拼接后的字符串。保证dest空间足够大。
+                            char *strcat(char *dest,const char *src,size_t n);
+                strncat:
+                        将src的前n个字符，拼接到dest后。形成一个新的字符串。保证dest空间足够大。
+                        char *strncat（char *dest，char *src,size_t n)
+                        s
+
+        字符串比较：
+                strcmp:
+                        比较s1和s2两个字符串，如果相等返回0.如果不相等，进一步对比s1和s2的ASCII码值。
+                        s1>s2 返回1
+                        s1<s2 返回-1
+                        int strcmp(const char *s1,const char *s2)
+
+
+                strncmp:
+                    int strcmp(const char *s1,const char *s2，size_t n)
+                        比较s1和s2两个字符串的前n个字符，
+                        如果相等返回0.如果不相等，进一步对比s1和s2的ASCII码值。（不比较字符串ASCII码的和）
+                        s1>s2 返回1
+                        s1<s2 返回-1
+                    
+
+
+
+        字符串格式化输入、输出：
+
+                sprintf（）：
+                        对应printf,将原来写到屏幕的“格式化字符串”，写到参数1 str中
+                        printf（"%d+%d=%d\n,10,24,10*24"）;
+                        --->
+                        char str[100];
+                        sprintf(str,"%d+%d=%d\n",10,24,10+24);格式串写入str数组中。
+
+                  sscanf（）： 
+                            int sscanf(const char *str,const char *format,...);
+                            对应scanf，将原来从屏幕获取的“格式化字符串”，从参数1 str 获取。
+                            scanf str【】="10+24=45";
+                            sscanf(str,"%d+%d=%d",&a,&b,&c);a-->10,b-->21,c-->45 
+
+
+字符串查找字符、子串：
+    strchr（）：
+            在字符串str中，找一个字符出现的位置。返回字符在字符串中的地址。
+
+            char *strchr(const char *s,int c);
+            printf("%s\n" strrchr("hehehahahoho",'a'));-->"ahahoho"
+
+    strrchr():
+            自右向左，在字符串str中 找一个字符出现的位置。返回字符在字符串中的地址。
+                char *strrchr(const char *s,int c);
+                printf("%s\n" strrchr("hehehahahoho",'a'));-->"ahoho"
+
+    strstr():
+            在字符串str中，找子串substr第一次出现的位置。返回地址。
+            char *strstr（const char *str，const char *substr）；
+            在字符串中找子串的位置。 
+
+
+字符串分割：
+            strtok（）：按照既定的分隔符，来拆分字符串。“www.baidu.com”
+             strtok(char * str,const char *delim)
+                参数1：带分割字符串。
+                参数2：分割符组成的“分割串”。
+                返回：字符串拆分后的首地址。“拆分”：将 分割字符用‘\0’
+
+            
+            特性：
+                    strtok拆分字符串是直接在  原串 上操作，所以要求参1必须，可读可写（char *str=“baidu.com”不行，因为不可写）。
+                    第一次拆分：参数1传 带拆分原串。第1+次拆分是，参数1传NULL。
+                     
+                #include<stdio.h>
+                #include<string.h>
+
+                int main22()
+                {  //字符串分割
+                    char str[]="www.baidu.com";
+                    char *p=strtok(str,".");
+
+                    printf("p=%s\n",p);
+                    for (int i=0;i<13;i++)
+                    {
+                      printf("zifu:%c\n",str[i]);
+                    }
+                    return 0;
+                }
+
+
+                int main()
+                {  //字符串分割
+                    char str[]="www.baidu.c om&tyu";
+                    char *p=strtok(str,". &");
+                    while (p!=NULL)
+                    {
+                        p=strtok(NULL,". &");
+                        printf("p=%s\n",p);
+                    }
+    
+                    return 0;
+                }
+                
+
+atoi/atof/atol:
+        使用这类函数进行转换。要求，原串必须是可转换的字符串。
+        错误使用：“abc123”-->0;"12hjd45"-->12;"123chcj"-->123;
+        atoi:字符串 转 整数。
+        int atoi（const char *nptr）;
+        atof:字符串 转 浮点数。
+        atol：字符串 转 长整形。 
+
+                        int main()
+                {  //字符串转换为 浮点型、整型、长整型。
+    
+                    char str1[]="     34";
+                    int num1=atoi(str1);
+                    printf("num1=%d\n",num1);
+
+                    char str2[]="0.234f";
+                    float num2=atof(str2);
+                    printf("num2=%f\n",num2);
+                    return 0;
+                }
+--------------------------------------------
+
+
+内存管理：
+
+
+    局部变量：
+
+
+        概念：定义在函数 内部 的变量。
+
+        作用域：从定义位置开始，到包裹该变量的第一个右大括号结束。
+
+
+
+    全局变量：
+        概念：定义在 函数 外 部的变量。
+        作用域：从定义位置开始，默认到本文件内部。其他文件如果想使用，可以通过声明方式将作用域导出。
+
+    static：全局变量
+
+            定义语法：在全局变量定义之前添加 static 关键字。  static int a=10；
+            作用域：被限制在本文件内部，不允许通过声明导出到其他文件。
+
+    static：局部变量
+               定义语法：在局部变量定义之前添加 static 关键字。  static int a=10； 
+               特性：静态局部变量只定义一次，在全局位置，通常用来做计数器。
+               作用域：从定义位置开始，到包裹该变量的第一个右大括号结束。
+
+全局函数：函数
+
+        定义语法：函数原型+函数体
+         
+static：
+        定义语法：static+函数原型+函数体   
+
+static函数：
+     static函数 只能在 本文件内部使用，其他文件即使声明 也不能引用 
+
+生命周期：
+            局部变量：从变量定义开始，函数调用完成。----函数内部。
+            全局变量：程序启动开始，程序终止结束。---程序执行期间。
+            static局部变量：程序启动开始，程序终止结束。---程序执行期间
+            static全局变量：程序启动开始，程序终止结束。----程序执行期间。
+            全局函数：程序启动开始，程序终止结束。====程序执行期间。
+            static 函数： 程序启动开始，程序终止结束。---程序执行期间。 
+
+内存4区模型：
+        代码段： .text段。程序源代码（二进制形式）。 只读。
+        数据段： .rodata:只读数据段。常量。
+                
+                .data段：初始化为非0 的全局变量和静态变量。
+                .bss段：初始化为0，未初始化的全局变量和静态变量。
+                        程序加载执行前，会将该段整体赋值为0 。 
+                .rodata:只读数据段，常量。 
+
+        stack：栈。空间比较小。windows：1--10m。 Linux：8m---16m。     
+                           系统自动管理。自动分配，自动释放。存储特性是：FILO。
+
+        heap堆：空间足够大。1.3G+   用户空间。 
+
+开辟释放heap空间：
+                void *malloc（size_t size）;申请 size 大小的空间
+                    返回实际申请到的内存空间首地址。【我们通常拿来当数组用】
+                void free（void *ptr）：释放申请的空间 。
+                    参： malloc 返回的地址值
+                    例子：
+
+                           #include<stdio.h>
+                            #include<string.h>
+                            int main()
+                            {   
+                               //int arr[10];   
+                                //申请内存
+                               int *p =(int *) malloc(sizeof(int )*10);
+                               if(p==NULL)
+                                {
+                                    printf("malloc erroe \n");
+                                    return -1;
+                                }
+                                //写入数据
+                                for(size_t i=0;i<10;i++)
+                                {
+                                    p[i]=i+10;
+                                }
+                                //读出数据 
+                                for (size_t i = 0; i < 10; i++)
+                                {
+                                  printf("data is  %d\n",*p+i);
+                                }
+                                //释放申请的内存
+                                free(p);
+                                p=NULL; //free释放后不会立即清空，所以需要把p置为空 
+                                return 0;
+                            }
+                      
+                使用heap空间:
+
+                        空间连续，当成数组使用。
+                        free后的空间，不会立即失效。通常将free后的 地址置为NULL。
+                        free地址必须是 malloc 申请地址。否则出错。  
+                        如果malloc之后地址一定会变化，那么使用临时变量temp保存。    char *temp=p；记录malloc返回的地址。用于free操作。
+
+
+二级指针对应的heap空间：
+        申请外层指针：char **p=(char **)malloc(sizeof(char *)*5)
+        申请内层指针：
+                        for(i=0;i<5;i++)
+                        {
+                            p[i]=(char *)malloc(sizeof(char)*10);
+                        }
+
+                        使用：不能修改p的值
+
+                         //写入数据
+                            for（int i=0;i<5;i++）
+                            {
+                                strcpy(p[i],"helloheap");
+                            }
+                        释放内层：
+                        for(int i=0;i<5;i++)
+                        {
+                            free(p[i]);
+                        }
+
+                        释放外层：
+                        free(p); 
+
+                        
+
+                    【    例：】
+
+                        #include<stdio.h>
+                        //二维数组申请空间
+                        int main()
+                        {   int **p= malloc(sizeof(int)*3);//申请外层空间
+                            for (size_t i = 0; i < 3; i++)
+                            {
+                                p[i]=malloc(sizeof(int)*5);//申请内层空间
+                            }
+
+                            //使用空间---写
+                            for (size_t i = 0; i< 3; i++)
+                            {
+                             for(size_t j=0;j<5;j++)
+                             {
+                                 p[i][j]=i+j;
+                             }
+                            }
+
+                               //使用空间---读
+                            for (size_t i = 0; i< 3; i++)
+                            {
+                             for(size_t j=0;j<5;j++)
+                             {
+                               printf("---%d ",*(*(p+i)+j));
+                             }
+                             printf("\n");
+                            }
+    
+                            //释放空间时候，应该先释放内层。
+
+                            for(size_t i=0;i<3;i++)
+                            {
+                                free(p[i]);
+                            }
+                            p=NULL;
+
+                            return 0;
+                        }
+
+
+
+栈的存储特性：
+局部变量：
+形参：
