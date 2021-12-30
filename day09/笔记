@@ -1,0 +1,601 @@
+printf--- sprintf---fprintf  参变函数：参数形参中  有“...”，最后有个固参通常是格式描述串（包含格式匹配符），
+										函数的参数个数、类型、顺序由这个固参决定。  
+
+				printf("%s","hello");
+				printf("ret=%d+%d\n",10,5);
+				printf("%d=%d%c%d\n",10+5,10,'5',5);---->屏幕
+				char buf[1024];
+				sprintf(buf,"%d=%d%c%d\n",10+5,10,'+',5);---->buf中
+				FILE *fp=fopen();
+				fprintf(fp,"%d=%d%c%d\n",10+5,10,'+',5);---->fp对应文件中
+
+				例子：
+					#include<stdio.h>
+
+					//fprintf
+					int main()
+					{   
+						FILE *fp = fopen("abc.c","w");//创建并且 写入文件abc.c
+						if(!fp)//fp==NULL
+						{
+							perror("fopen error");
+							return -1;
+						}
+							fprintf(fp,"%d%c%d=%d",2,'*',5,2*5);
+							fclose(fp);
+
+						return 0;
+					}
+
+
+
+
+scanf---sscanf---fscanf
+
+fprintf（）函数：
+		int fprintf(FILE *stream,const char *format,...);
+fscanf()函数：
+		int fscanf(FILE *stream,const char *format,...);
+		1)边界溢出。存储读取的数据空间。在使用之前清空。 
+		2）fscanf函数，每次在调用时都会判断下一次调用是否匹配参数2，如果不匹配提前结束文件读操作。 
+
+
+				读写
+
+							#include<stdio.h>
+							void write_file()
+							{
+								FILE *fp = fopen("abx.c","w");
+								if(!fp)//fp==NULL
+								{
+									perror("fopen error");
+        
+								}
+									fprintf(fp,"%d%c%d=%d",2,'*',5,2*5);
+									fclose(fp);
+							}
+
+							void read_flie()//读文件abx.c
+							{   int a,b,c;
+								char ch;
+								FILE *fp = fopen("abx.c","r");
+								if(!fp)//fp==NULL
+								{
+									perror("fopen error");
+								}
+									fscanf(fp,"%d%c%d=%d\n",&a,&ch,&b,&c);
+									printf(" ---%d%c%d=%d\n",a,ch,b,c);
+									fclose(fp);
+							}
+
+							//fprintf   
+							int main()
+							{   
+									write_file();
+									read_flie();
+										return 0;
+							}
+
+fprintf（）函数
+
+
+						练习：文件版排序：
+                            生成随机数，写入文件。将文件内乱序随机数读出，排好序再写回文件。 
+
+						            #include<stdio.h>
+                                    #include<math.h>
+                                    #include<string.h>
+                                    #include<stdlib.h>
+                                    #include<time.h>
+
+                                    void bubbleSort();
+
+
+                                    //生成一个teast1.txt 写入随机数，读出随机数
+                                    void writeRand()
+                                    {   
+                                        FILE *fp=fopen("teast1.txt","w");
+                                        if(!fp)//fp==NULL
+                                             {
+                                                perror("fopen error");
+                                             }
+
+                                         srand(time(NULL));//随机种子
+                                        for (size_t i = 0; i <10; i++)
+                                        {
+                                            fprintf(fp,"%d\n",rand()%100);//0--99
+
+                                        }
+                                        fclose(fp);
+                                    }
+
+                                    void readRand()
+                                    {   
+                                        int arr[10];
+                                        int i=0;
+                                        FILE *fp=fopen("teast1.txt","r");
+                                        if(!fp)//fp==NULL
+                                             {
+                                                perror("fopen error");
+                                             }
+
+                                        while (1)
+                                        {
+                                           fscanf(fp,"%d\n",&arr[i]);
+                                           i++;
+                                           if(feof(fp))
+                                           {
+                                               break;
+                                           }  
+                                        }
+
+                                         printf("before-----------------------");
+
+                                        for (size_t i = 0; i < 10; i++)
+                                        {
+                                          printf("%d\n",arr[i]);
+                                        }
+
+                                        bubbleSort(arr,sizeof(arr)/sizeof(arr[0]));
+                                         fclose(fp);
+
+                                        printf("after-----------------------");
+
+                                        for (size_t i = 0; i < 10; i++)
+                                        {
+                                          printf("%d\n",arr[i]);
+                                        }
+                                         fclose(fp);
+
+                                         fp=fopen("teast1.txt","w");//清空原未排序文件
+                                         if(!fp)//fp==NULL
+                                             {
+                                                perror("fopen error");
+                                             }
+                                               fclose(fp);
+
+                                    }
+
+                                    void bubbleSort(int *arr,int n)
+                                    {
+                                        for(int i=0;i<n-1;i++)
+                                        {
+                                            for(int j=0;j<n-1;j++)
+                                                {
+                                                    if(arr[j]>arr[j+1])
+                                                        {
+                                                            int temp =arr[j];
+                                                            arr[j]=arr[j+1];
+                                                            arr[j+1]=temp;
+                                                         }
+                                                }
+                                            }
+                                    }
+
+
+                                    int main()
+                                    {   
+                                        writeRand();
+   
+                                        readRand();
+                                        return 0;
+                                    }
+fscanf（）函数：
+        FILE *fp=fopen("r");
+        fscanf(fp,"%d",&m);  fp指向的文件中--->m
+
+
+fgetc---fputc:
+fgets---fputs: 
+fprintf---fscanf: 
+
+
+fwrite()函数：
+
+    写出数据到文件中。
+    size_t fwrite(const void *ptr,szie_t size,size_t number,FILE *stream);
+    参数1：代写出的数据地址
+    参数2：待写出数据大小
+    参数3：写出的个数
+    参数4：文件
+    返回值：成功：永远是 参数3 的值。---通常将参数2 传1值，将参数3传实际写出字节数。
+    失败：0
+
+    
+                 #include<stdio.h>
+                #include<math.h>
+                #include<string.h>
+                #include<stdlib.h>
+                #include<time.h>
+
+                typedef struct infomation
+                {
+                    int age;
+                    char name[10];
+                    int num;
+                }stu_t;
+
+
+                int main()
+                {  
+                     stu_t stu[4]={
+                    18,"xiaoming",1,
+                    19,"xiaohong",2,
+                    20,"xiaoli",3,
+                    21,"xiaobai",4,
+                                };
+
+                   FILE *fp =fopen("test2.txt","w");
+
+                    if(!fp)
+                    {
+                        perror("fopen error");
+                    }
+                    int ret=fwrite(&stu[0],1,sizeof(stu_t)*4,fp);
+
+                    if(ret==0)
+                    {
+                        perror("fwrite error");
+                    }
+                    return 0; 
+                }
+ 
+
+
+
+fread（）：
+
+    从文件fp中读出数据。
+    size_t fread(void *ptr,szie_t size,size_t number,FILE *stream);
+    参数1：读取到数据的存储位置。
+    参数2：一次读取到的字节数。
+    参数3：读取的次数
+    参数4：文件
+    返回值：成功：参数3的值。
+            0：读失败---feof（fp）--到达文件结尾。
+
+
+                         #include<stdio.h>
+                        #include<math.h>
+                        #include<string.h>
+                        #include<stdlib.h>
+                        #include<time.h>
+
+                        typedef struct infomation
+                        {
+                            int age;
+                            char name[10];
+                            int num;
+                        }stu_t;
+
+                        void writeStruct()
+                        {
+                              stu_t stu[4]={
+                            18,"xiaoming",1,
+                            19,"xiaohong",2,
+                            20,"xiaoli",3,
+                            21,"xiaobai",4,
+                                        };
+
+                           FILE *fp =fopen("test2.txt","w");
+
+                            if(!fp)
+                            {
+                                perror("fopen error");
+                            }
+                            int ret=fwrite(&stu[0],1,sizeof(stu_t)*4,fp);
+
+                            if(ret==0)
+                            {
+                                perror("fwrite error");
+                            }
+                        }
+                        //一次读一个元素
+                        void readStruct1()
+                        { 
+                            FILE *fp =fopen("test2.txt","r");
+
+                            if(!fp)
+                            {
+                                perror("fopen error");
+                            }
+                            stu_t s1;      
+                            int ret=fread(&s1,sizeof(stu_t),1,fp);
+                            printf("ret=%d\n",ret);
+                            printf("age=%d,name=%s,num=%d\n",s1.age,s1.name,s1.num); 
+
+                            fclose(fp);
+                        }
+
+
+                        //一次读4个元素
+                        void readStruct2()
+                        { 
+                            FILE *fp =fopen("test2.txt","r");
+
+                            if(!fp)
+                            {
+                                perror("fopen error");
+                            }
+                            stu_t s1[10];  
+                            int i=0;
+                            while (1)
+                            {
+                                int ret=fread(&s1[i],sizeof(stu_t),1,fp);
+                                if(ret==0)//替代feof（）函数来判断读到文件结尾。
+                                {
+                                    break;
+                                }
+                                printf("age=%d,name=%s,num=%d\n",s1[i].age,s1[i].name,s1[i].num);
+        
+                            }
+                            fclose(fp); 
+                        }
+
+
+
+
+                        int main()
+                        {  
+                           readStruct1();
+                            return 0; 
+                        }
+
+
+
+练习：大文件拷贝
+
+                已知一个任意类型的文件，对该文件复制，产生一个相同的新文件。
+                 1.打开两个文件夹，一个“r”,另外一个“w”
+                 2.从r中 fread， fwrite到w 文件中。
+                 3.判断到达文件结尾 终止。
+                 4.关闭。
+                 【注意】：在windows下，打开二进制文件（mp3,mp4,avi,jpg...)时需要使用“b”。如：“rb”、“wb”.
+
+
+
+
+                         #include<stdio.h>
+                        #include<math.h>
+                        #include<string.h>
+                        #include<stdlib.h>
+                        #include<time.h>
+
+                        void myFileCopy()
+                        {
+                            FILE *rfp=fopen("C:\\PY\\heima\\c_jichu\\day09\\test2.txt","r");
+                            FILE *wfp=fopen("C:\\PY\\heima\\c_jichu\\day09\\copytest2.txt","w");
+
+                            char buf[128]={0};//缓冲区
+
+                            int ret=0;  
+
+                            while (1)
+                            {
+                              ret=fread(buf,1,sizeof(buf),rfp);
+                                if(ret==0)
+                                    {
+                                     break;
+                                    }
+                                fwrite(buf,1,ret,wfp);
+
+                            }
+                            fclose(rfp);
+                            fclose(wfp);
+
+                        }
+                        int main()
+                        {  
+                            myFileCopy();
+                            printf("---------------------finsh-------------");
+                            return 0; 
+                        }
+
+
+文件读写指针。在文件内只有一个。
+
+        fseek:
+            int fseek(FILE *stream,long offset,int whence);
+            参数1：文件。
+            参数2：偏移量（矢量：+向后，向前）
+            参数3：SEEK_SET:文件开头位置；
+                   SEEK_CUR:当前位置；
+                   SEEK_END:文件结尾位置。
+            返回值：成功：0
+                    失败：-1
+
+        ftell():
+                获取文件读写指针位置。
+                long ftell(FILE *stream);
+                返回：从文件当前读写位置到起始位置的偏移量。
+                借助 ftell（fp）+fseek（fp,0,SEEK_END）;来获取文件大小。
+        rewind：
+                
+                回卷文件读写指针。将指针光标指回到开头。 
+                void rewind(FILE *stream) 
+
+
+
+                例子：
+
+                                  #include<stdio.h>
+                                #include<math.h>
+                                #include<string.h>
+                                #include<stdlib.h>
+                                #include<time.h>
+
+                                typedef struct student
+                                {
+                                   int age;
+                                   char name[10];// 
+                                   int num;
+                                } stu_t;
+
+                                int main()
+                                {  
+                                    stu_t stu[4]={
+                                    18,"xiaoming",1,
+                                    19,"xiaohong",2,
+                                    20,"xiaoli",3,
+                                    21,"xiaobai",4,
+                                                };
+                                    stu_t s1;
+
+                                    FILE *fp=fopen("test03.txt","wb+");
+                                    if(!fp)//fp==null
+                                    {
+                                        perror("fopen error");
+                                    }
+
+                                    int ret1=fwrite(&stu[0],1,sizeof(stu),fp);//把数据以二进制形式写入到文件中 ，大小为 sizeof(stu),
+                                    printf("ret1=%d\n",ret1);
+
+                                    fseek(fp,sizeof(stu_t)*2,SEEK_SET);//从文件起始位置，向后偏移n个stu结构体中一组数据的大小
+                                    int ret2=fread(&s1,1,sizeof(s1)*2,fp);
+                                    printf("ret2=%d\n",ret2);
+                                    printf("1 age=%d,name=%s,num=%d\n",s1.age,s1.name,s1.num);
+
+                                    int len=ftell(fp);//获取文件当前读写指针偏移位置，到文件起始位置的偏移量。
+                                    printf("len=%d\n",len);
+
+                                    rewind(fp);//将文件读写指针回卷到起始 
+                                    fread(&s1,1,sizeof(s1),fp);
+                                    printf("2 age=%d,name=%s,num=%d\n",s1.age,s1.name,s1.num);
+
+                                    //获取文件大小
+                                     fseek(fp,0,SEEK_END);//把文件读写指针放到文件结尾。
+                                    len=ftell(fp);
+                                     printf("len1=%d\n",len);
+
+                                    fclose(fp);
+                                }
+
+
+
+            文件读写指针：
+
+                                    #include<stdio.h>
+                        #include<math.h>
+                        #include<string.h>
+                        #include<stdlib.h>
+                        #include<time.h>
+                        //文件读写指针
+                        int main()
+                        {   
+                            FILE *fp=fopen("test04.txt","w+");
+
+                            int ret1=fputs("11111",fp);
+                            printf("ret=%d\n",ret1);//0表示成功
+
+                            int ret2=fputs("22222",fp);
+                            printf("ret=%d\n",ret2);//0表示成功
+
+                            int ret3=fputs("33333",fp);
+                            printf("ret=%d\n",ret3);//0表示成功
+
+                            char buf[1024]={0};//缓冲区
+
+                            //fseek(fp,5*2,SEEK_SET);//改变读写指针位置
+                            rewind(fp);//光标回到起始位置
+                            char *ptr=fgets(buf,1024,fp);//读
+                            if(ptr==NULL)
+                            {
+                                printf("ptr==NULL\n");
+                            } 
+    
+                            printf("fgets ptr=%s\n",ptr);
+                            printf("buf=%s\n",buf);
+
+                            fclose(fp);
+                            return 0;
+                        }
+
+
+Linux和windows文件区别：
+        1.对于二进制文件操作，windows使用“b”，linux下二进制和文本没区别。
+        2）对文件指针，先写后读。windows和linux效果一致。
+                       先读后写。linux无需修改。windows下需要在写操作之前使用fseek（fp,0,SEEK_CUR）;来获取文件读写指针，使之生效。
+ 
+                例子：
+            
+                    #include<stdio.h>
+                    #include<math.h>
+                    #include<string.h>
+                    #include<stdlib.h>
+                    #include<time.h>
+                    int main()
+                    {   
+                        FILE *fp=fopen("test04.txt","r+");
+                        char buf[6]={0};
+                        char *ptr=fgets(buf,6,fp);
+                        printf("buf=%s,ptr=%s\n",ptr,buf);
+    
+                        //windows下需要在写操作之前使用
+                        //fseek（fp,0,SEEK_CUR）;来获取文件读写指针，使之生效。
+                        fseek(fp,0,SEEK_CUR);
+                        int ret=fputs("AAAAA",fp);
+                        printf("ret=%d\n",ret);
+                        fclose(fp);
+                        return 0;
+                    }
+
+
+获取文件状态：
+               打开文件，对于系统而言，消耗的系统资源比较大。
+                    #include<stdio.h>
+                    #include<math.h>
+                    #include<string.h>
+                    #include<stdlib.h>
+                    #include<time.h>
+                    //获取文件大小
+                    //stat需要 包含以下头函数
+                    #include<sys/types.h>
+                    #include<sys/stat.h>
+                    int main()
+                    {  //此方法计算文件大小，消耗系统资源较少。 
+                        struct stat buf;
+                        int ret =stat("test03.txt",&buf);//传出参数：在函数调用结束时，充当函数返回值。
+                        printf("\nfile_sizeis %d\n",buf.st_size);//不打开文件，获取文件大小
+                        return 0;
+                    }
+
+                    int main11()
+                    {   //此方法计算文件大小，由于打开和关闭文件的操作，是比较消耗系统资源。
+                         FILE *fp=fopen("test03.txt","r+");
+                         fseek(fp,0,SEEK_CUR);
+                         int lne=ftell(fp);
+                         printf("sizefile is %d",len);
+                    }
+ 
+文件删除、重命名：
+
+            int remove(const char *pathname);删除文件
+            int rename(const char *oldpath,const char *newpath);重命名
+
+缓冲区刷新：
+        
+        标准输出---stdout--标准输出缓冲区。写给屏幕的数据，都是先存缓冲区中，由缓冲区一次性刷新到物理设备（屏幕）。
+        标准输入---stdin--标准输入缓冲区。从键盘读取的数据，直接读到缓冲区中，由缓冲区给程序提供数据。
+        预读入、缓输出。
+        行缓冲：printf（）；遇到 \n就会将缓冲区中的数据刷新到物理设备上。
+        全缓冲：文件。缓冲区存满，数据刷新到物理设备上。
+        无缓冲：perror。缓冲区中只要有数据，就会立即刷新到物理设备。
+
+        文件关闭时，缓冲区会被自动刷新。
+        手动刷新缓冲区：实时刷新。
+                int fflush(FILE *stream)
+                    成功：0
+                    失败：-1
+
+
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
